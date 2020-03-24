@@ -7,7 +7,6 @@ import java.io.*;
 
 public class InterPolynomial {
     int arrLen, start, end;
-    BigDecimal amountValue = new BigDecimal(0);
     BigDecimal[] arrDataFile =  new BigDecimal[arrLen];
     BigDecimal[] arrAbscissa = new BigDecimal[arrLen];
 
@@ -20,7 +19,7 @@ public class InterPolynomial {
                 end = n + 1;
                 break;
             }
-            else if (!(x - Float.valueOf(arrAbscissa[i].toString()) >= 0)){
+            else if (arrAbscissa[i].compareTo(BigDecimal.valueOf(x)) >= 0){
                 if (n % 2 == 1)
                     gap = (n + 1) / 2;
                 else
@@ -44,21 +43,23 @@ public class InterPolynomial {
         System.out.println(start + " SS " + end + " Value: " + arrAbscissa[start] + " " + arrAbscissa[end]);
     }
 
-    BigDecimal sumPolynomial(int n, float x) {
+    BigDecimal sumPolynomial(int n, float x, BigDecimal value) {
         BigDecimal abscissaSum = new BigDecimal(1);
         BigDecimal sumPolynomial = new BigDecimal(0);
         BigDecimal tmp;
 
         for (int i = 0; i < n; i++) {
-            tmp = getPolynomial(i + 1);
+            tmp = getPolynomial(start, end,i + 1);
             abscissaSum = abscissaSum.multiply(BigDecimal.valueOf(x).subtract(arrAbscissa[start + i]));
-            sumPolynomial = tmp.multiply(abscissaSum);
+            sumPolynomial = sumPolynomial.add(tmp.multiply(abscissaSum));
+            //System.out.println("abscissaSum " + abscissaSum + "XXX:  " + x + " - " + arrAbscissa[start + i]);
+            //System.out.println(sumPolynomial + "\n");
         }
 
-        return sumPolynomial.add(arrAbscissa[start]);
+        return sumPolynomial.add(value);
     }
 
-    BigDecimal getPolynomial(int dif) {
+    BigDecimal getPolynomial(int dif, int start, int end) {
         for (int i = start; i <= end; i++) {
             arrDataFile[i] = (arrDataFile[i].subtract(arrDataFile[i + dif]))
                     .divide(arrAbscissa[i].subtract(arrAbscissa[i + dif]), RoundingMode.DOWN);

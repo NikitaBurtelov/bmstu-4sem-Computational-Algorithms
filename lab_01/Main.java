@@ -46,6 +46,7 @@ public class Main {
     public static void main(String args[]) throws IOException{
         ValueTable tmp = new ValueTable();
         InterPolynomial polynomial = new InterPolynomial();
+        HalfDivision getDiv = new HalfDivision();
         BigDecimal arr_x[] = new BigDecimal[tmp.arrLen];
         BigDecimal arr_y[] = new BigDecimal[tmp.arrLen];
 
@@ -57,13 +58,16 @@ public class Main {
         polynomial.arrDataFile = arr_y;
         polynomial.arrLen = lenDataArr;
 
+        getDiv.arrAbscissa = arr_x;
+        getDiv.arrDataFile = arr_y;
+
         tmp.N = n;
 
         tmp.initDataFile();
 
         polynomial.findIndex(n, x);
-        System.out.println(polynomial.sumPolynomial(n, x));
-
+        System.out.println("Sum " + polynomial.sumPolynomial(n, x, arr_y[polynomial.start]));
+        System.out.println(getDiv.getHalfDivision());
 
     }
 }
